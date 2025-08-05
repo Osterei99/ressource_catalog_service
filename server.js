@@ -4,6 +4,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const app = express();
+app.use(express.json());
 
 const port = 5002;
 const __filename = fileURLToPath(import.meta.url);
@@ -29,7 +30,7 @@ app.get('/resources/:id', (req, res) => {
         const resourceId = req.params.id;
         const data = readFileSync(data_file, 'utf8');
         const resources = JSON.parse(data);
-        const resource = resources.find(r => r.id === resourceId);
+        const resource = resources.find(r => r.id == resourceId);
 
         if (resource) {
             res.json(resource);
