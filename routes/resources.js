@@ -18,7 +18,7 @@ router.get('/', (req, res) => {
         const resources = JSON.parse(data);
         res.json(resources);
     } catch (error) {
-        next(error); // Pass the error to the error handling middleware
+        next(error);
     }
 });
 
@@ -33,11 +33,11 @@ router.get('/:id', (req, res) => {
         if (resource) {
             res.json(resource);
         } else {
-            res.status(404).json({ error: `Ressource mit ID ${resourceId} nicht gefunden.` })
+            next(error);
         }
 
     } catch (error) {
-        next(error); // Pass the error to the error handling middleware
+        next(error);
     }
 });
 
@@ -68,7 +68,7 @@ router.post('/', (req, res) => {
         // 5. Antwort schicken.
         res.status(201).json(newResource);
     } catch (error) {
-        next(error); // Pass the error to the error handling middleware
+        next(error);
     }
 
 });
@@ -106,41 +106,10 @@ router.put('/:id', (req, res) => {
         res.status(200).json(resources[resourceIndex]);
 
     } catch(error) {
-        next(error); // Pass the error to the error handling middleware
+        next(error);
     }
 
 });
-
-router.delete('/:id', (req, res) => {
-    // 1. ID auslesen
-    const resourceId = req.params.id;
-
-    try {
-        // 2. Alle Ressourcen laden
-        const data = readFileSync(data_file, 'utf8');
-        let resources = JSON.parse(data);
-
-        // 3. Die Ressource nach der ID suchen
-        const initialLength = resources.length;
-        resources = resources.filter(r => r.id !== resourceId);
-
-        // 4. Wenn die Länge des Arrays sich nicht geändert hat, wurde die Ressource nicht gefunden
-        if (resources.length === initialLength) {
-            res.status(404).json({ error: `Ressource mit ID ${resourceId} nicht gefunden.` });
-            return;
-        }
-
-        // 5. Updates in der Datei speichern.
-        writeFileSync(data_file, JSON.stringify(resources, null, 2), 'utf8');
-
-        // 6. Erfolgreiche Löschung mit 204 No Content
-        res.status(204).send();
-
-    } catch (error) {
-        next(error); // Pass the error to the error handling middleware
-    }
-});
-
 
 
 
