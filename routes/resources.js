@@ -18,7 +18,7 @@ router.get('/', (req, res) => {
         const resources = JSON.parse(data);
         res.json(resources);
     } catch (error) {
-        res.status(500).json({ error: 'Interner Serverfehler beim Laden der Ressourcen-Daten.' });
+        next(error); // Pass the error to the error handling middleware
     }
 });
 
@@ -37,7 +37,7 @@ router.get('/:id', (req, res) => {
         }
 
     } catch (error) {
-        res.status(500).json({ error: 'Interner Serverfehler beim Laden der Ressourcen-Daten.' });
+        next(error); // Pass the error to the error handling middleware
     }
 });
 
@@ -68,7 +68,7 @@ router.post('/', (req, res) => {
         // 5. Antwort schicken.
         res.status(201).json(newResource);
     } catch (error) {
-        res.status(500).json({ error: 'Interner Serverfehler bei der Verarbeitung der Ressourcen-Daten.' });
+        next(error); // Pass the error to the error handling middleware
     }
 
 });
@@ -106,7 +106,7 @@ router.put('/:id', (req, res) => {
         res.status(200).json(resources[resourceIndex]);
 
     } catch(error) {
-        res.status(500).json({ error: 'Interner Serverfehler bei der Verarbeitung der Ressourcen-Daten.' });
+        next(error); // Pass the error to the error handling middleware
     }
 
 });
@@ -137,7 +137,7 @@ router.delete('/:id', (req, res) => {
         res.status(204).send();
 
     } catch (error) {
-        res.status(500).json({ error: 'Interner Serverfehler bei der Verarbeitung der Ressourcen-Daten.' });
+        next(error); // Pass the error to the error handling middleware
     }
 });
 
