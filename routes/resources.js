@@ -111,6 +111,37 @@ router.put('/:id', (req, res) => {
 
 });
 
+router.delete('/:id', (req, res) => {
+    // 1. ID auslesen
+    const resourceId = req.params.id;
+
+    try {
+        // 2. Alle Ressourcen laden
+        const data = readFileSync(data_file, 'utf8');
+        let resources = JSON.parse(data);
+
+        // 3. Die Ressource nach der ID suchen
+        const initialLength = resources.length;
+        resources = resources.filter(r => r.id !== resourceId);
+
+        // 4. Wenn die Länge des Arrays sich nicht geändert hat, wurde die Ressource nicht gefunden
+        if (resources.length === initialLength) {
+            res.status(404).json({ error: `Ressource mit ID ${resourceId} nicht gefunden.` });
+            return;
+        }
+
+        // 5. Updates in der Datei speichern.
+        writeFileSync(data_file, JSON.stringify(resources, null, 2), 'utf8');
+
+        // 6. Erfolgreiche Löschung mit 204 No Content
+        res.status(204).send();
+
+    } catch (error) {
+        res.status(500).json({ error: 'Interner Serverfehler bei der Verarbeitung der Ressourcen-Daten.' });
+    }
+});
+
+
 
 
 export default router;
